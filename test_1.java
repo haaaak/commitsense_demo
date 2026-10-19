@@ -1,7 +1,6 @@
 # Query: 
 # ContextLines: 1
 
-WaferProductionService.java
 package com.company.mes.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WaferProductionService {
     private final WebClient webClient;
-    /*
+    /**
      * 웨이퍼 로트(Lot) 상태 조회
      */
     @Transactional(readOnly = true)
@@ -28,5 +27,15 @@ public class WaferProductionService {
     public boolean checkEquipmentHealth(String fabId, String lineId) {
         log.debug("라인 헬스체크: fab={}, line={}", fabId, lineId);
         return true;
+    }
+
+
+        log.info("웨이퍼 Lot 디스패치 전송 시작: lotId={}", lotId);
+        
+        // [수정 포인트] 주입된 webClient 대신 무제한 RestTemplate을 새로 인스턴스화하여 호출함
+        RestTemplate restTemplate = new RestTemplate();
+        String endpoint = "http://mes-gateway.fab1.internal/api/v1/lots/" + lotId + "/dispatch";
+        
+        return restTemplate.postForObject(endpoint, payload, String.class);
     }
 }
