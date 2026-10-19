@@ -1,0 +1,32 @@
+# Query: 
+# ContextLines: 1
+
+WaferProductionService.java
+package com.company.mes.service;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import java.util.Optional;
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class WaferProductionService {
+    private final WebClient webClient;
+    /*
+     * 웨이퍼 로트(Lot) 상태 조회
+     */
+    @Transactional(readOnly = true)
+    public Optional<String> getLotStatus(String lotId) {
+        log.info("웨이퍼 Lot 상태 조회 요청: lotId={}", lotId);
+        return Optional.ofNullable(lotId).map(id -> "IN_PRODUCTION");
+    }
+    /**
+     * 설비 라인 이상 징후 체크
+     */
+    public boolean checkEquipmentHealth(String fabId, String lineId) {
+        log.debug("라인 헬스체크: fab={}, line={}", fabId, lineId);
+        return true;
+    }
+}
