@@ -29,4 +29,17 @@ public class WaferProductionService {
         log.debug("라인 헬스체크: fab={}, line={}", fabId, lineId);
         return true;
     }
+
+        /**
+     * [신규 기능 추가] 설비 라인으로 웨이퍼 로트 디스패치 전송
+     */
+    public String dispatchWaferLot(String lotId, String payload) {
+        log.info("웨이퍼 Lot 디스패치 전송 시작: lotId={}", lotId);
+        
+        // [수정 포인트] 이미 주입된 webClient 대신 무제한 RestTemplate을 새로 인스턴스화하여 호출함
+        RestTemplate restTemplate = new RestTemplate();
+        String endpoint = "http://mes-gateway.fab1.internal/api/v1/lots/" + lotId + "/dispatch";
+        
+        return restTemplate.postForObject(endpoint, payload, String.class);
+    }
 }
